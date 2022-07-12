@@ -1,4 +1,4 @@
-# gestionpagos
+# Gestion de Pagos
 
 Herramienta web para la gestion de pagos
 
