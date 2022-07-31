@@ -1,7 +1,14 @@
-//Funcion mostrar
-function mostrar (resultado){
-    console.log(resultado);
-}
+const formatoMonedaArg = new Intl.NumberFormat('es-AR', {
+    currency: 'ARS', 
+    style: 'currency',
+    minimumFractionDigits: "0",
+});
+
+const formatoMonedaUsa = new Intl.NumberFormat('es-AR', {
+    currency: 'USD', 
+    style: 'currency',
+    minimumFractionDigits: "0",
+});
 
 //Clase obrero
 class Obrero {
@@ -33,46 +40,57 @@ for (let i = 0; i < sueldos.length; i++) {
     pagosPropios = pagosPropios + (sueldos[i] * 5);
 }
 
+let botonEjecutar = document.getElementById('ejecutar');
+botonEjecutar.onclick = function() {
+
 //Ingreso de datos - Dinero disponible
-let caja = parseInt(prompt("Ingrese el monto disponible en caja: "));
-let cobranzas = parseInt(prompt("Ingrese el monto de cobranzas que podrian ingresar: "));
+let caja = parseInt(document.getElementById('montoCaja').value);
+
+let cobranzas = parseInt(document.getElementById('montoCobranzas').value);
 
 //Ingreso de datos - Pagos que se deben realizar
-let pagosSubcontratistas = parseInt(prompt("Ingrese el monto de pagos a subcontratistas: "));
-
-//Alert - Pagos a personal propio
-alert("El monto de pagos a personal propio es de: " + pagosPropios);
+let pagosSubcontratistas = parseInt(document.getElementById('montoSubcontratistas').value);
 
 //Ingreso de datos - Otros pagos
-let cantidadOtrosPagos = parseInt(prompt("Cantidad de otros pagos a ingresar: "));
+let cantidadOtrosPagos = parseInt(document.getElementById('otrosPagos').value);
+
 let montoOtrosPagos;
 let sumaOtrosPagos = 0;
 for (let i = 0; i < cantidadOtrosPagos; i++) {
-    montoOtrosPagos = parseInt(prompt("Ingrese el monto del pago: "));
-    sumaOtrosPagos = parseInt(sumaOtrosPagos) + parseInt(montoOtrosPagos);
+    let montoOtrosPagos = parseInt(document.getElementById('montoOtrosPagos').value);
+    sumaOtrosPagos = sumaOtrosPagos + montoOtrosPagos;
 }
 
 //Ingreso de datos - Valor del dolar
-let valorDolar = parseInt(prompt("Ingrese el valor del dolar en el dia de la fecha: "));
+let valorDolar = parseInt(document.getElementById('montoValorDolar').value);
 
 //Calculo del monto en pesos disponible y del monto total de pagos que se deben realizar
 let pesosDisponibles = caja + cobranzas;
 let pagosTotal = pagosSubcontratistas + pagosPropios + sumaOtrosPagos;
-mostrar("Pesos disponibles: " + pesosDisponibles);
-mostrar("Pagos que se deben realizar: " + pagosTotal);
+
+let resultados = document.getElementById("divResultados");
+resultados.innerHTML = `<h2>Resultados</h2>
+                        <hr class = "divider"/>
+                        <p> El monto de pagos a peronsal propio es de: ${formatoMonedaArg.format(pagosPropios)}</p>
+                        <p> Pesos disponibles: ${formatoMonedaArg.format(pesosDisponibles)}</p>
+                        <p> Pagos que se deben realizar: ${formatoMonedaArg.format(pagosTotal)}</p>`;
 
 //Calculo del saldo luego de realizar los pagos
 let saldo = pesosDisponibles - pagosTotal;
 
 //Caso 1: el monto en pesos disponible es mayor que los pagos que se deben realizar
 if (saldo >= 0){
-    mostrar("Es posible realizar todos los pagos con el dinero disponible. Saldo disponible luego de realizar los pagos: " + saldo);
+    let resultados2 = document.getElementById("divResultados2");
+    resultados2.innerHTML = `<p> Es posible realizar todos los pagos con el dinero disponible. Saldo disponible luego de realizar los pagos: ${formatoMonedaArg.format(saldo)}</p>`;
 }
 
 //Caso 2: el monto en pesos disponible es menor que los pagos que se deben realizar. Calculo de la cantidad de dolares que se deben cambiar.
 else {
-    mostrar("No es posible realizar todos los pagos con el dinero disponible, se deben cambiar dolares");
     let dolares = Math.ceil (saldo * (-1) / valorDolar);
-    mostrar("Cantidad de dolares que se deben cambiar: " + dolares);
-    mostrar("Saldo disponible luego de realizar los pagos: " + (pesosDisponibles + (dolares*valorDolar) - pagosTotal));
+    let saldoDespuesPagos = (pesosDisponibles + (dolares*valorDolar) - pagosTotal);
+    let resultados3 = document.getElementById("divResultados3");
+    resultados3.innerHTML = `<p> No es posible realizar todos los pagos con el dinero disponible, se deben cambiar dolares.</p>
+                            <p> Cantidad de dolares que se deben cambiar: ${formatoMonedaUsa.format(dolares)}</p>
+                            <p> Saldo disponible luego de realizar los pagos: ${formatoMonedaArg.format(saldoDespuesPagos)}</p>`;
+}
 }
