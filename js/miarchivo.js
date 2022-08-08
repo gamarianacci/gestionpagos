@@ -1,3 +1,23 @@
+//Funciones
+function validarDatos (a, b) {
+    if(isNaN(a) || isNaN(b)){
+        let resultados = document.getElementById("divError");
+        resultados.innerHTML = `<h2>Error!</h2>
+                                <hr class = "divider"/>
+                                <p> Los resultados presentan errores. Por favor complete todos los campos para visualizar los resultados correctamente. Si usted no ingreso el valor del dolar, se utilizara el ultimo valor ingresado.</p>`;
+    }
+}
+
+function validarDato (c) {
+    if(isNaN(c)){
+        let resultados = document.getElementById("divError");
+        resultados.innerHTML = `<h2>Error!</h2>
+                                <hr class = "divider"/>
+                                <p> Los resultados presentan errores. Por favor complete todos los campos para visualizar los resultados correctamente. Si usted no ingreso el valor del dolar, se utilizara el ultimo valor ingresado.</p>`;
+    }
+}
+
+//Formato Moneda
 const formatoMonedaArg = new Intl.NumberFormat('es-AR', {
     currency: 'ARS', 
     style: 'currency',
@@ -40,6 +60,7 @@ for (let i = 0; i < sueldos.length; i++) {
     pagosPropios = pagosPropios + (sueldos[i] * 5);
 }
 
+//Boton ejecutar
 let botonEjecutar = document.getElementById('ejecutar');
 botonEjecutar.onclick = function() {
 
@@ -51,8 +72,9 @@ let cobranzas = parseInt(document.getElementById('montoCobranzas').value);
 //Ingreso de datos - Pagos que se deben realizar
 let pagosSubcontratistas = parseInt(document.getElementById('montoSubcontratistas').value);
 
-//Ingreso de datos - Otros pagos
+//Ingreso de datos - Otros pagos y validacion de dato
 let cantidadOtrosPagos = parseInt(document.getElementById('otrosPagos').value);
+validarDato(cantidadOtrosPagos);
 
 let montoOtrosPagos;
 let sumaOtrosPagos = 0;
@@ -64,10 +86,22 @@ for (let i = 0; i < cantidadOtrosPagos; i++) {
 //Ingreso de datos - Valor del dolar
 let valorDolar = parseInt(document.getElementById('montoValorDolar').value);
 
+//Utilizacion del Local Storage para guardar el valor del dolar
+if(isNaN(valorDolar)){
+    valorDolar = Number(localStorage.getItem("valorDolar"));
+    alert ("Error: usted no ingreso el valor del dolar. Se utilizara el ultimo valor ingresado.")
+} else{
+    localStorage.setItem("valorDolar", valorDolar.toString());
+}
+
 //Calculo del monto en pesos disponible y del monto total de pagos que se deben realizar
 let pesosDisponibles = caja + cobranzas;
 let pagosTotal = pagosSubcontratistas + pagosPropios + sumaOtrosPagos;
 
+//Validacion de datos para asegurar que se ingresen todos los datos
+validarDatos(pesosDisponibles, pagosTotal);
+
+//Resultados
 let resultados = document.getElementById("divResultados");
 resultados.innerHTML = `<h2>Resultados</h2>
                         <hr class = "divider"/>
@@ -90,6 +124,7 @@ else {
     let saldoDespuesPagos = (pesosDisponibles + (dolares*valorDolar) - pagosTotal);
     let resultados3 = document.getElementById("divResultados3");
     resultados3.innerHTML = `<p> No es posible realizar todos los pagos con el dinero disponible, se deben cambiar dolares.</p>
+                            <p> Valor del dolar: ${formatoMonedaUsa.format(valorDolar)}</p>
                             <p> Cantidad de dolares que se deben cambiar: ${formatoMonedaUsa.format(dolares)}</p>
                             <p> Saldo disponible luego de realizar los pagos: ${formatoMonedaArg.format(saldoDespuesPagos)}</p>`;
 }
