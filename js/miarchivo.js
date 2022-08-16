@@ -1,19 +1,13 @@
 //Funciones
 function validarDatos (a, b) {
     if(isNaN(a) || isNaN(b)){
-        let resultados = document.getElementById("divError");
-        resultados.innerHTML = `<h2>Error!</h2>
-                                <hr class = "divider"/>
-                                <p> Los resultados presentan errores. Por favor complete todos los campos para visualizar los resultados correctamente. Si usted no ingreso el valor del dolar, se utilizara el ultimo valor ingresado.</p>`;
+        swal("Error!", "Los resultados presentan errores. Por favor complete todos los campos para visualizar los resultados correctamente. Si usted no ingreso el valor del dolar, se utilizara el ultimo valor ingresado.", "error");
     }
 }
 
 function validarDato (c) {
     if(isNaN(c)){
-        let resultados = document.getElementById("divError");
-        resultados.innerHTML = `<h2>Error!</h2>
-                                <hr class = "divider"/>
-                                <p> Los resultados presentan errores. Por favor complete todos los campos para visualizar los resultados correctamente. Si usted no ingreso el valor del dolar, se utilizara el ultimo valor ingresado.</p>`;
+        swal("Error!", "Los resultados presentan errores. Por favor complete todos los campos para visualizar los resultados correctamente. Si usted no ingreso el valor del dolar, se utilizara el ultimo valor ingresado.", "error");
     }
 }
 
@@ -89,7 +83,7 @@ let valorDolar = parseInt(document.getElementById('montoValorDolar').value);
 //Utilizacion del Local Storage para guardar el valor del dolar
 if(isNaN(valorDolar)){
     valorDolar = Number(localStorage.getItem("valorDolar"));
-    alert ("Error: usted no ingreso el valor del dolar. Se utilizara el ultimo valor ingresado.")
+    swal("Error!", "Usted no ingreso el valor del dolar. Se utilizara el ultimo valor ingresado.", "error");
 } else{
     localStorage.setItem("valorDolar", valorDolar.toString());
 }
