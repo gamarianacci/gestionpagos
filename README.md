@@ -1,6 +1,10 @@
-# Gestion de Pagos
+# Gestión de Pagos
 
-Herramienta web para la gestion de pagos
+Herramienta web para la gestión de pagos
+
+* HTML
+* CSS
+* JAVASCRIPT
 
 ## Autor
 
